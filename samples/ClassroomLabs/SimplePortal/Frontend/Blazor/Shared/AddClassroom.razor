@@ -1,0 +1,113 @@
+﻿@using SimplePortal.UI.Web.Data
+@inject SimplePortalService Service
+
+<h3>Add Classroom</h3>
+
+
+@if (response == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    if (okStatus == true)
+    {
+        <p class="text-info"><strong>Class added!</strong></p>
+    }
+    else if (response.Status == StatusCodes.Error)
+    {
+        <p class="text-danger"><strong>@response.ErrorMessage</strong></p>
+    }
+
+    <p>
+        <label for="semester">Semester</label>
+        <select id="semester" name="semester" @bind="request.Semester">
+            <option />
+            @foreach (var sem in response.Semesters)
+            {
+                <option value="@sem.DisplayName">@sem.DisplayName</option>
+            }
+        </select>
+    </p>
+    <p>
+        <label for="department">Department</label>
+        <select id="department" name="department" @bind="request.Department">
+            <option />
+            @foreach (var dep in response.Departments)
+            {
+                <option value="@dep.ShortName">@dep.DisplayName</option>
+            }
+        </select>
+    </p>
+    <p>
+        <label for="coursetype">Course Type</label>
+        <select id="coursetype" name="coursetype" @bind="request.CourseType">
+            <option />
+            @foreach (var ct in response.CourseTypes)
+            {
+                <option value="@ct.Name">@ct.Name</option>
+            }
+        </select>
+    </p>
+    <p>
+        <label for="classcode">Class Code</label>
+        <input type="number" id="classcode" name="classcode" @bind="request.ClassCode" min="100" max="999" />
+    </p>
+    <p>
+        <label for="classname">Class Name</label>
+        <input type="text" id="classname" name="classname" @bind="request.ClassName" />
+    </p>
+    <p>
+        <input type="checkbox" @bind="request.DefaultCredentials" id="defaultCredentials" name="defaultCredentials" />
+        <label for="defaultCredentials">Use default credentials</label>
+    </p>
+    @if (request.DefaultCredentials == false)
+    {
+        <p>
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" @bind="request.Username" />
+        </p>
+        <p>
+            <label for="pwd">Password</label>
+            <input type="password" id="pwd" name="pwd" @bind="request.Password" />
+        </p>
+    }
+
+    <p><button class="btn btn-primary" @onclick="btnAdd_Click">Add</button></p>
+
+    if (response.Classes?.Count > 0)
+    {
+        <h3>Classes</h3>
+
+        @foreach (var cls in response.Classes)
+        {
+            <p>@cls</p>
+        }
+    }
+}
+
+
+@code {
+    private ClassroomResponse response;
+    private AddClassroomRequest request;
+    private bool okStatus = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        request = new AddClassroomRequest();
+        response = await Service.GetClassroomAsync();
+    }
+
+    private async void btnAdd_Click()
+    {
+        response = null;
+        response = await Service.AddClassroomAsync(request);
+        if (response.Status == StatusCodes.OK)
+        {
+            okStatus = true;
+            request = new AddClassroomRequest();
+        }
+        else
+            okStatus = false;
+    }
+}
