@@ -79,11 +79,7 @@ function getTokenRedirect(request, endpoint) {
 function seeProfile() {
   getTokenRedirect(loginRequest, graphConfig.graphMeEndpoint);
 }
-  
-function readMail() {
-  if (accessToken) {
-    callMSGraph(graphConfig.graphMailEndpoint, accessToken, updateUI);
-  } else {
-    getTokenRedirect(tokenRequest, graphConfig.graphMailEndpoint);
-  }
+
+function addClass() {
+  getTokenRedirect(loginRequest, graphConfig.graphMeEndpoint);
 }

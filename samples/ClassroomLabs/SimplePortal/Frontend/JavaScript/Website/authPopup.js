@@ -41,7 +41,7 @@ function seeProfile() {
     getTokenPopup(loginRequest)
       .then(response => {
         callMSGraph(graphConfig.graphMeEndpoint, response.accessToken, updateUI);
-        //profileButton.classList.add("d-none");
+        profileButton.classList.add("d-none");
         mailButton.classList.remove("d-none");
       }).catch(error => {
         console.log(error);
@@ -49,11 +49,11 @@ function seeProfile() {
   }
 }
 
-function readMail() {
+function addClass() {
   if (myMSALObj.getAccount()) {
-    getTokenPopup(tokenRequest)
+    getTokenPopup(loginRequest)
       .then(response => {
-        callMSGraph(graphConfig.graphMailEndpoint, response.accessToken, updateUI);
+        callMSGraph(graphConfig.addClassEndpoint, response.accessToken, updateUI);
       }).catch(error => {
         console.log(error);
       });
