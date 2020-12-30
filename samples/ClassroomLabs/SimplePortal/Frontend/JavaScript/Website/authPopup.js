@@ -41,7 +41,7 @@ function seeProfile() {
     getTokenPopup(loginRequest)
       .then(response => {
         callMSGraph(graphConfig.graphMeEndpoint, response.accessToken, updateUI);
-        profileButton.classList.add("d-none");
+        //profileButton.classList.add("d-none");
         mailButton.classList.remove("d-none");
       }).catch(error => {
         console.log(error);
