@@ -20,9 +20,9 @@ const loginRequest = {
 };
 
 // Add here the endpoints for MS Graph API services you would like to use.
-const serviceConfig = {
-  graphMeEndpoint: "https://graph.microsoft.com/v1.0/me",
-  addClassEndpoint: "https://graph.microsoft.com/v1.0/me"
+const endpointConfig = {
+  classesEndpoint: "https://simple-portal-api.azure-api.net/simpleportal/classes",
+  addClassEndpoint: "https://simple-portal-api.azure-api.net/simpleportal/classes/create"
 };
 
 // Helper function to call MS Graph API endpoint 
@@ -38,59 +38,27 @@ function callService(endpoint, token, callback) {
       headers: headers
   };
 
-  console.log('request made to Graph API at: ' + new Date().toString());
+  console.log('GET request made to API at: ' + new Date().toString());
   
   fetch(endpoint, options)
     .then(response => response.json())
     .then(response => callback(response, endpoint))
-    .catch(error => console.log(error))
+    .catch(error => {
+      console.log(error);
+      classesDiv.innerText = error;
+    })
 }
 
+// Create the main myMSALObj instance
+// configuration parameters are located at authConfig.js
+const myMSALObj = new Msal.UserAgentApplication(msalConfig); 
 
 // Select DOM elements to work with
 const headerDiv = document.getElementById("headerMessage");
 const signInButton = document.getElementById("signIn");
 const signOutButton = document.getElementById('signOut');
-const profileDiv = document.getElementById("profile-div");
+const classesDiv = document.getElementById("classes-div");
 const addClassDiv = document.getElementById("add-class-div");
-
-function showWelcomeMessage(account) {
-  headerDiv.innerHTML = headerDiv.innerHTML + ` (${account.name})`;
-    signInButton.classList.add('d-none');
-    signOutButton.classList.remove('d-none');
-    addClassDiv.classList.remove('d-none');
-}
-
-function updateUI(data, endpoint) {
-  console.log('Graph API responded at: ' + new Date().toString());
-
-  if (endpoint === serviceConfig.graphMeEndpoint) {
-    const title = document.createElement('p');
-    title.innerHTML = "<strong>Title: </strong>" + data.jobTitle;
-    const email = document.createElement('p');
-    email.innerHTML = "<strong>Mail: </strong>" + data.mail;
-    const phone = document.createElement('p');
-    phone.innerHTML = "<strong>Phone: </strong>" + data.businessPhones[0];
-    const address = document.createElement('p');
-    address.innerHTML = "<strong>Location: </strong>" + data.officeLocation;
-    profileDiv.appendChild(title);
-    profileDiv.appendChild(email);
-    profileDiv.appendChild(phone);
-    profileDiv.appendChild(address);
-  } else if(endpoint == serviceConfig.addClassEndpoint) {
-    const title = document.createElement('p');
-    title.innerHTML = "<strong>Title: </strong>" + data.jobTitle;
-    profileDiv.appendChild(title);
-  }
- 
-}
-
-
-
-
-// Create the main myMSALObj instance
-// configuration parameters are located at authConfig.js
-const myMSALObj = new Msal.UserAgentApplication(msalConfig); 
 
 let accessToken;
 
@@ -129,6 +97,35 @@ function signOut() {
   myMSALObj.logout();
 }
 
+function showWelcomeMessage(account) {
+  headerDiv.innerHTML = headerDiv.innerHTML + ` (${account.name})`;
+    signInButton.classList.add('d-none');
+    signOutButton.classList.remove('d-none');
+    addClassDiv.classList.remove('d-none');
+}
+
+function updateUI(data, endpoint) {
+  console.log('Graph API responded at: ' + new Date().toString());
+
+  if(endpoint == endpointConfig.classesEndpoint) {
+    const msg = document.createElement('p');
+    msg.innerHTML = "<strong>Classes: </strong>" + data;
+    classesDiv.appendChild(msg);
+  } else if(endpoint == endpointConfig.addClassEndpoint) {
+    const msg = document.createElement('p');
+    msg.innerHTML = "<strong>Add class: </strong>" + data;
+    classesDiv.appendChild(msg);
+  }
+}
+
+function displayClasses() {
+  getTokenRedirect(loginRequest, endpointConfig.classesEndpoint);
+}
+
+function addClass() {
+  getTokenRedirect(loginRequest, endpointConfig.addClassEndpoint);
+}
+
 // This function can be removed if you do not need to support IE
 function getTokenRedirect(request, endpoint) {
   return myMSALObj.acquireTokenSilent(request)
@@ -154,8 +151,4 @@ function getTokenRedirect(request, endpoint) {
           // fallback to interaction when silent call fails
           return myMSALObj.acquireTokenRedirect(request);
       });
-}
-
-function addClass() {
-  getTokenRedirect(loginRequest, serviceConfig.addClassEndpoint);
 }
