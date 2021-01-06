@@ -20,9 +20,15 @@ const loginRequest = {
 };
 
 // Add here the endpoints for MS Graph API services you would like to use.
-const endpointConfig = {
-  classesEndpoint: "https://simple-portal-api.azure-api.net/simpleportal/classes",
-  addClassEndpoint: "https://simple-portal-api.azure-api.net/simpleportal/classes/create"
+const endpointsConfig = {
+  classes: {
+    url: "https://simple-portal-api.azure-api.net/simpleportal/classes",
+    method: "GET",
+  },
+  addClass: {
+    url: "https://simple-portal-api.azure-api.net/simpleportal/classes/create", 
+    method: "POST",
+  }
 };
 
 // Helper function to call MS Graph API endpoint 
@@ -30,17 +36,17 @@ const endpointConfig = {
 function callService(endpoint, token, callback) {
   const headers = new Headers();
   const bearer = `Bearer ${token}`;
-
+  
   headers.append("Authorization", bearer);
 
   const options = {
-      method: "GET",
+      method: endpoint.method,
       headers: headers
   };
 
-  console.log('GET request made to API at: ' + new Date().toString());
+  console.log(endpoint.method + ' request made to API at: ' + new Date().toString());
   
-  fetch(endpoint, options)
+  fetch(endpoint.url, options)
     .then(response => response.json())
     .then(response => callback(response, endpoint))
     .catch(error => {
@@ -107,11 +113,11 @@ function showWelcomeMessage(account) {
 function updateUI(data, endpoint) {
   console.log('Graph API responded at: ' + new Date().toString());
 
-  if(endpoint == endpointConfig.classesEndpoint) {
+  if(endpoint == endpointsConfig.classes) {
     const msg = document.createElement('p');
     msg.innerHTML = "<strong>Classes: </strong>" + data;
     classesDiv.appendChild(msg);
-  } else if(endpoint == endpointConfig.addClassEndpoint) {
+  } else if(endpoint == endpointsConfig.addClass) {
     const msg = document.createElement('p');
     msg.innerHTML = "<strong>Add class: </strong>" + data;
     classesDiv.appendChild(msg);
@@ -119,11 +125,11 @@ function updateUI(data, endpoint) {
 }
 
 function displayClasses() {
-  getTokenRedirect(loginRequest, endpointConfig.classesEndpoint);
+  getTokenRedirect(loginRequest, endpointsConfig.classes);
 }
 
 function addClass() {
-  getTokenRedirect(loginRequest, endpointConfig.addClassEndpoint);
+  getTokenRedirect(loginRequest, endpointsConfig.addClass);
 }
 
 // This function can be removed if you do not need to support IE
