@@ -19,7 +19,7 @@ const loginRequest = {
   scopes: ["openid", "profile", "User.Read"]
 };
 
-// Add here the endpoints for MS Graph API services you would like to use.
+// Add here the endpoints here
 const endpointsConfig = {
   classes: {
     url: "https://simple-portal-api.azure-api.net/simpleportal/classes",
@@ -31,7 +31,7 @@ const endpointsConfig = {
   }
 };
 
-// Helper function to call MS Graph API endpoint 
+// Helper function to call service API endpoint 
 // using authorization bearer token scheme
 function callService(endpoint, token, callback) {
   const headers = new Headers();
@@ -51,8 +51,8 @@ function callService(endpoint, token, callback) {
     .then(response => callback(response, endpoint))
     .catch(error => {
       console.log(error);
-      classesDiv.innerText = error;
-    })
+      messagesDiv.innerText = error;
+    });
 }
 
 // Create the main myMSALObj instance
@@ -60,11 +60,12 @@ function callService(endpoint, token, callback) {
 const myMSALObj = new Msal.UserAgentApplication(msalConfig); 
 
 // Select DOM elements to work with
-const headerDiv = document.getElementById("headerMessage");
 const signInButton = document.getElementById("signIn");
 const signOutButton = document.getElementById('signOut');
-const classesDiv = document.getElementById("classes-div");
+const headerDiv = document.getElementById("headerMessage");
 const addClassDiv = document.getElementById("add-class-div");
+const messagesDiv = document.getElementById("messages-div");
+const classesDiv = document.getElementById("classes-div");
 
 let accessToken;
 
@@ -91,9 +92,11 @@ function authRedirectCallBack(error, response) {
   }
 }
 
+/*
 if (myMSALObj.getAccount()) {
   showWelcomeMessage(myMSALObj.getAccount());
 }
+*/
 
 function signIn() {
   myMSALObj.loginRedirect(loginRequest);
@@ -104,10 +107,12 @@ function signOut() {
 }
 
 function showWelcomeMessage(account) {
-  headerDiv.innerHTML = headerDiv.innerHTML + ` (${account.name})`;
-    signInButton.classList.add('d-none');
-    signOutButton.classList.remove('d-none');
-    addClassDiv.classList.remove('d-none');
+  signInButton.classList.add('d-none');
+  signOutButton.classList.remove('d-none');
+  headerDiv.classList.remove('d-none');
+  headerDiv.innerHTML = `Welcome, ${account.name}!`;
+  addClassDiv.classList.remove('d-none');
+  displayClasses();
 }
 
 function updateUI(data, endpoint) {
@@ -119,8 +124,8 @@ function updateUI(data, endpoint) {
     classesDiv.appendChild(msg);
   } else if(endpoint == endpointsConfig.addClass) {
     const msg = document.createElement('p');
-    msg.innerHTML = "<strong>Add class: </strong>" + data;
-    classesDiv.appendChild(msg);
+    msg.innerHTML = "<strong>Class added! </strong>" + data;
+    messagesDiv.appendChild(msg);
   }
 }
 
