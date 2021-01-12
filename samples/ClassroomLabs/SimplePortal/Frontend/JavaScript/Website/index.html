@@ -16,12 +16,13 @@
     if (typeof Msal === 'undefined') document.write(unescape("%3Cscript src='https://alcdn.msftauth.net/lib/1.4.0/js/msal.js' type='text/javascript' %3E%3C/script%3E"));
   </script>
 
-  <!-- adding Bootstrap 4 for UI components  -->
+  <link rel="icon" href="favicon.ico" />
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 </head>
 
 <body>
+
   <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <a class="navbar-brand" href="/">Simple Portal</a>
     <div class="btn-group ml-auto dropleft">
@@ -38,8 +39,9 @@
       <button class="btn btn-primary" id="show-add-class-btn" onclick="showAddClass()">+ Add Class</button>
     </div>
 
+    <div id="messages-div"></div>
+
     <div id="classes-div">
-      <div id="messages-div"></div>
       <div>
         <div>hyperv-using-ui</div>
         <div>Agriculture 340</div>

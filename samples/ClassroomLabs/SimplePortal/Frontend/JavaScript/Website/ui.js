@@ -139,11 +139,14 @@ function addClass() {
 function showAddClass() {
   showAddClassBtn.classList.add('d-none');
   addClassDiv.classList.remove('d-none');
+  messagesDiv.innerText = null;
 }
 
 function back() {
   showAddClassBtn.classList.remove('d-none');
   addClassDiv.classList.add('d-none');
+  messagesDiv.classList.remove('d-none');
+  messagesDiv.innerText = null;
 }
 
 // This function can be removed if you do not need to support IE
