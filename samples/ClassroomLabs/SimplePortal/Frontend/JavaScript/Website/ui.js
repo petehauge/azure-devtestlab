@@ -22,11 +22,11 @@ const loginRequest = {
 // Add here the endpoints here
 const endpointsConfig = {
   classes: {
-    url: "https://simple-portal-api.azure-api.net/simpleportal/classes",
+    url: msalConfig.auth.redirectUri + "api/classes",
     method: "GET",
   },
   addClass: {
-    url: "https://simple-portal-api.azure-api.net/simpleportal/classes/create", 
+    url: msalConfig.auth.redirectUri + "api/classes/create", 
     method: "POST",
   }
 };
@@ -62,10 +62,12 @@ const myMSALObj = new Msal.UserAgentApplication(msalConfig);
 // Select DOM elements to work with
 const signInButton = document.getElementById("signIn");
 const signOutButton = document.getElementById('signOut');
-const headerDiv = document.getElementById("headerMessage");
+const bodyDiv = document.getElementById('body-div');
+const bodyTitleDiv = document.getElementById("body-title-div");
+const showAddClassBtn = document.getElementById("show-add-class-btn");
+const classesDiv = document.getElementById("classes-div");
 const addClassDiv = document.getElementById("add-class-div");
 const messagesDiv = document.getElementById("messages-div");
-const classesDiv = document.getElementById("classes-div");
 
 let accessToken;
 
@@ -92,11 +94,9 @@ function authRedirectCallBack(error, response) {
   }
 }
 
-/*
 if (myMSALObj.getAccount()) {
   showWelcomeMessage(myMSALObj.getAccount());
 }
-*/
 
 function signIn() {
   myMSALObj.loginRedirect(loginRequest);
@@ -109,10 +109,9 @@ function signOut() {
 function showWelcomeMessage(account) {
   signInButton.classList.add('d-none');
   signOutButton.classList.remove('d-none');
-  headerDiv.classList.remove('d-none');
-  headerDiv.innerHTML = `Welcome, ${account.name}!`;
-  addClassDiv.classList.remove('d-none');
-  displayClasses();
+  bodyDiv.classList.remove('d-none');
+  bodyTitleDiv.innerHTML = `Welcome, ${account.name}!`;
+  //displayClasses();
 }
 
 function updateUI(data, endpoint) {
@@ -135,6 +134,16 @@ function displayClasses() {
 
 function addClass() {
   getTokenRedirect(loginRequest, endpointsConfig.addClass);
+}
+
+function showAddClass() {
+  showAddClassBtn.classList.add('d-none');
+  addClassDiv.classList.remove('d-none');
+}
+
+function back() {
+  showAddClassBtn.classList.remove('d-none');
+  addClassDiv.classList.add('d-none');
 }
 
 // This function can be removed if you do not need to support IE

@@ -1,50 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Simple Portal</title>
-    
-    <!-- msal.min.js can be used in the place of msal.js; included msal.js to make debug easy -->
-    <script type="text/javascript" src="https://alcdn.msauth.net/lib/1.4.0/js/msal.js" integrity="sha384-DqrejB/00ccJc4ufFWc+TA3ImOruMihWCj6Wu9hEzRUNdqt4180qlzT0mFa6/Zp2" crossorigin="anonymous"></script>
-    
-    <!-- msal.js with a fallback to backup CDN -->
-    <script type="text/javascript">
-      if(typeof Msal === 'undefined')document.write(unescape("%3Cscript src='https://alcdn.msftauth.net/lib/1.4.0/js/msal.js' type='text/javascript' %3E%3C/script%3E"));
-    </script>
 
-    <!-- adding Bootstrap 4 for UI components  -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-  </head>
-  <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-      <a class="navbar-brand" href="/">Simple Portal</a>
-      <div class="btn-group ml-auto dropleft">
-        <button type="button" id="signIn" class="btn btn-secondary" onclick="signIn()">Sign In</button>
-        <button type="button" id="signOut" class="btn btn-success d-none" onclick="signOut()">Sign Out</button>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+  <title>Simple Portal</title>
+
+  <!-- msal.min.js can be used in the place of msal.js; included msal.js to make debug easy -->
+  <script type="text/javascript" src="https://alcdn.msauth.net/lib/1.4.0/js/msal.js"
+    integrity="sha384-DqrejB/00ccJc4ufFWc+TA3ImOruMihWCj6Wu9hEzRUNdqt4180qlzT0mFa6/Zp2"
+    crossorigin="anonymous"></script>
+
+  <!-- msal.js with a fallback to backup CDN -->
+  <script type="text/javascript">
+    if (typeof Msal === 'undefined') document.write(unescape("%3Cscript src='https://alcdn.msftauth.net/lib/1.4.0/js/msal.js' type='text/javascript' %3E%3C/script%3E"));
+  </script>
+
+  <!-- adding Bootstrap 4 for UI components  -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a class="navbar-brand" href="/">Simple Portal</a>
+    <div class="btn-group ml-auto dropleft">
+      <button type="button" id="signIn" class="btn btn-secondary" onclick="signIn()">Sign In</button>
+      <button type="button" id="signOut" class="btn btn-success d-none" onclick="signOut()">Sign Out</button>
     </div>
-    </nav>
-    
-    <h4 id="headerMessage" class="d-none">Welcome!</h1>
+  </nav>
+
+  <div id="body-div" class="d-none">
+
+    <div id="body-title-div">Welcome!</div>
+
+    <div>
+      <button class="btn btn-primary" id="show-add-class-btn" onclick="showAddClass()">+ Add Class</button>
+    </div>
+
+    <div id="classes-div">
+      <div id="messages-div"></div>
+      <div>
+        <div>hyperv-using-ui</div>
+        <div>Agriculture 340</div>
+        <div>Materials to teach ArcGIC</div>
+        <div>Windows 10</div>
+        <div>Small GPU</div>
+      </div>
+      <div>
+        <div>hyperv-using-ui</div>
+        <div>Math 340</div>
+        <div>Basic modeling with MatLab and Simlink</div>
+        <div>Windows 10</div>
+        <div>Medium</div>
+      </div>
+    </div>
 
     <div id="add-class-div" class="d-none">
-      <h5>Add Class</h5>
+      <div>Add Class</div>
 
-      <label for="classname">Class Name</label>
-      <input type="text" id="classname" name="classname" />
+      <div>
+        <label for="labTemplate">Lab Template</label>
+        <input type="text" id="labTemplate" name="labTemplate" />
+        <label for="name">Name your lab</label>
+        <input type="text" id="name" name="name" />
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" />
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" />
+      </div>
 
-      <button class="btn btn-primary" id="addClass" onclick="addClass()">Add Class</button>
-      <div id="messages-div"></div>
-      <div id="classes-div"></div>
+      <button class="btn btn-primary" id="btnAddClass" onclick="addClass()">Finish</button>
+      <button class="btn btn-secondary" id="btnBack" onclick="back()">Back</button>
     </div>
+  </div>
 
-    <!-- importing bootstrap.js and supporting js libraries -->
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>  
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-    
-    <!-- importing app scripts (load order is important) -->
-    <script type="text/javascript" src="./ui.js"></script>
+  <!-- importing bootstrap.js and supporting js libraries -->
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+    crossorigin="anonymous"></script>
 
-  </body>
+  <!-- importing app scripts (load order is important) -->
+  <script type="text/javascript" src="./ui.js"></script>
+
+</body>
+
 </html>
