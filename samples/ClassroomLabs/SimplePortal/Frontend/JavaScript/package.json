@@ -1,5 +1,5 @@
 {
-  "name": "Simple Portal",
+  "name": "simple-portal",
   "version": "1.0.0",
   "description": "Website project for the Simple Portal",
   "main": "server.js",
