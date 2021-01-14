@@ -33,48 +33,43 @@
 
   <div id="body-div" class="d-none">
 
+    <div>
+      <button class="btn btn-primary" id="show-add-class-btn" onclick="addClassShow()">+ Add Class</button>
+    </div>
+
     <div id="body-title-div">Welcome!</div>
 
-    <div>
-      <button class="btn btn-primary" id="show-add-class-btn" onclick="showAddClass()">+ Add Class</button>
+    <div id="classes-div">
+    </div>
+
+    <div id="add-class-div" class="d-none">
+      <div><h3>Add Class</h3></div>
+
+      <div>
+        <div>
+          <label for="labTemplate">Lab Template</label>
+          <input type="text" id="labTemplate" name="labTemplate" />
+        </div>
+        <div>
+          <label for="name">Name your lab</label>
+          <input type="text" id="name" name="name" />
+        </div>
+        <div>
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" />
+        </div>
+        <div>
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" />
+        </div>
+      </div>
+
+      <button class="btn btn-primary" id="btnAddClass" onclick="addClassFunction()">Finish</button>
+      <button class="btn btn-secondary" id="btnBack" onclick="addClassBack()">Back</button>
     </div>
 
     <div id="messages-div"></div>
 
-    <div id="classes-div">
-      <div>
-        <div>hyperv-using-ui</div>
-        <div>Agriculture 340</div>
-        <div>Materials to teach ArcGIC</div>
-        <div>Windows 10</div>
-        <div>Small GPU</div>
-      </div>
-      <div>
-        <div>hyperv-using-ui</div>
-        <div>Math 340</div>
-        <div>Basic modeling with MatLab and Simlink</div>
-        <div>Windows 10</div>
-        <div>Medium</div>
-      </div>
-    </div>
-
-    <div id="add-class-div" class="d-none">
-      <div>Add Class</div>
-
-      <div>
-        <label for="labTemplate">Lab Template</label>
-        <input type="text" id="labTemplate" name="labTemplate" />
-        <label for="name">Name your lab</label>
-        <input type="text" id="name" name="name" />
-        <label for="username">Username</label>
-        <input type="text" id="username" name="username" />
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" />
-      </div>
-
-      <button class="btn btn-primary" id="btnAddClass" onclick="addClass()">Finish</button>
-      <button class="btn btn-secondary" id="btnBack" onclick="back()">Back</button>
-    </div>
   </div>
 
   <!-- importing bootstrap.js and supporting js libraries -->

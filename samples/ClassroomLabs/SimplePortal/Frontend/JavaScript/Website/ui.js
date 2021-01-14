@@ -11,8 +11,8 @@ const msalConfig = {
     cacheLocation: "sessionStorage", // This configures where your cache will be stored
     storeAuthStateInCookie: false, // Set this to "true" if you are having issues on IE11 or Edge
   }
-};  
-  
+};
+
 // Add here the scopes to request when obtaining an access token for MS Graph API
 // for more, visit https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-core/docs/scopes.md
 const loginRequest = {
@@ -23,29 +23,32 @@ const loginRequest = {
 const endpointsConfig = {
   classes: {
     url: msalConfig.auth.redirectUri + "api/classes",
-    method: "GET",
+    method: "GET"
   },
   addClass: {
-    url: msalConfig.auth.redirectUri + "api/classes/create", 
+    url: msalConfig.auth.redirectUri + "api/classes/create",
     method: "POST",
+    data: {}
   }
 };
 
 // Helper function to call service API endpoint 
 // using authorization bearer token scheme
 function callService(endpoint, token, callback) {
+
   const headers = new Headers();
-  const bearer = `Bearer ${token}`;
-  
-  headers.append("Authorization", bearer);
+  if (token) {
+    headers.append("Authorization", `Bearer ${token}`);
+  }
 
   const options = {
-      method: endpoint.method,
-      headers: headers
+    method: endpoint.method, // *GET, POST, PUT, DELETE, etc.
+    headers: headers,
+    body: endpoint.data
   };
-
-  console.log(endpoint.method + ' request made to API at: ' + new Date().toString());
   
+  console.log(endpoint.method + ' request made to API at: ' + new Date().toString());
+
   fetch(endpoint.url, options)
     .then(response => response.json())
     .then(response => callback(response, endpoint))
@@ -57,7 +60,7 @@ function callService(endpoint, token, callback) {
 
 // Create the main myMSALObj instance
 // configuration parameters are located at authConfig.js
-const myMSALObj = new Msal.UserAgentApplication(msalConfig); 
+const myMSALObj = new Msal.UserAgentApplication(msalConfig);
 
 // Select DOM elements to work with
 const signInButton = document.getElementById("signIn");
@@ -76,21 +79,21 @@ myMSALObj.handleRedirectCallback(authRedirectCallBack);
 
 function authRedirectCallBack(error, response) {
   if (error) {
-      console.log(error);
+    console.log(error);
   } else {
-      if (response.tokenType === "id_token") {
-          console.log("id_token acquired at: " + new Date().toString()); 
-          
-          if (myMSALObj.getAccount()) {
-            showWelcomeMessage(myMSALObj.getAccount());
-          }
+    if (response.tokenType === "id_token") {
+      console.log("id_token acquired at: " + new Date().toString());
 
-      } else if (response.tokenType === "access_token") {
-        console.log("access_token acquired at: " + new Date().toString());
-        accessToken = response.accessToken;
-      } else {
-          console.log("token type is:" + response.tokenType);
+      if (myMSALObj.getAccount()) {
+        showWelcomeMessage(myMSALObj.getAccount());
       }
+
+    } else if (response.tokenType === "access_token") {
+      console.log("access_token acquired at: " + new Date().toString());
+      accessToken = response.accessToken;
+    } else {
+      console.log("token type is:" + response.tokenType);
+    }
   }
 }
 
@@ -111,38 +114,60 @@ function showWelcomeMessage(account) {
   signOutButton.classList.remove('d-none');
   bodyDiv.classList.remove('d-none');
   bodyTitleDiv.innerHTML = `Welcome, ${account.name}!`;
-  //displayClasses();
+  displayClassesFunction();
 }
 
 function updateUI(data, endpoint) {
+  var dataString = JSON.stringify(data);
   console.log('Graph API responded at: ' + new Date().toString());
 
-  if(endpoint == endpointsConfig.classes) {
-    const msg = document.createElement('p');
-    msg.innerHTML = "<strong>Classes: </strong>" + data;
-    classesDiv.appendChild(msg);
-  } else if(endpoint == endpointsConfig.addClass) {
-    const msg = document.createElement('p');
-    msg.innerHTML = "<strong>Class added! </strong>" + data;
-    messagesDiv.appendChild(msg);
+  if (endpoint == endpointsConfig.addClass) {
+    messagesDiv.innerHTML = "<strong>Class added! </strong>";
   }
+
+  // Print the classes
+  const p = document.createElement('p');
+  for(var i = 0; i<data.length; i++){
+    var div1 = document.createElement('div');
+    div1.innerText = data[i].id;
+    p.appendChild(div1);
+    
+    var div2 = document.createElement('div');
+    div2.innerText = data[i].name;
+    p.appendChild(div2);
+    
+    var div3 = document.createElement('div');
+    div3.innerText = data[i].description;
+    p.appendChild(div3);
+
+    var div4 = document.createElement('div');
+    div4.innerText = data[i].classtype;
+    p.appendChild(div4);
+
+    var div5 = document.createElement('div');
+    div5.innerText = data[i].size;
+    p.appendChild(div5);
+  };
+
+  classesDiv.innerHTML = p.innerHTML;
 }
 
-function displayClasses() {
+function displayClassesFunction() {
   getTokenRedirect(loginRequest, endpointsConfig.classes);
 }
 
-function addClass() {
+function addClassFunction() {
+  endpointsConfig.addClass.data = { "name": "hi hi hooo!" };
   getTokenRedirect(loginRequest, endpointsConfig.addClass);
 }
 
-function showAddClass() {
+function addClassShow() {
   showAddClassBtn.classList.add('d-none');
   addClassDiv.classList.remove('d-none');
   messagesDiv.innerText = null;
 }
 
-function back() {
+function addClassBack() {
   showAddClassBtn.classList.remove('d-none');
   addClassDiv.classList.add('d-none');
   messagesDiv.classList.remove('d-none');
@@ -152,26 +177,26 @@ function back() {
 // This function can be removed if you do not need to support IE
 function getTokenRedirect(request, endpoint) {
   return myMSALObj.acquireTokenSilent(request)
-      .then((response) => {
-        console.log(response);
-        if (response.accessToken) {
-            console.log("access_token acquired at: " + new Date().toString());
-            accessToken = response.accessToken;
+    .then((response) => {
+      console.log(response);
+      if (response.accessToken) {
+        console.log("access_token acquired at: " + new Date().toString());
+        accessToken = response.accessToken;
 
-            if (accessToken) {
-              try {
-                callService(endpoint, accessToken, updateUI);
-              } catch(err) {
-                console.log(err)
-              } finally {
-                //profileButton.classList.add('d-none');
-              }
-            }
+        if (accessToken) {
+          try {
+            callService(endpoint, accessToken, updateUI);
+          } catch (err) {
+            console.log(err)
+          } finally {
+            //profileButton.classList.add('d-none');
+          }
         }
-      })
-      .catch(error => {
-          console.log("silent token acquisition fails. acquiring token using redirect");
-          // fallback to interaction when silent call fails
-          return myMSALObj.acquireTokenRedirect(request);
-      });
+      }
+    })
+    .catch(error => {
+      console.log("silent token acquisition fails. acquiring token using redirect");
+      // fallback to interaction when silent call fails
+      return myMSALObj.acquireTokenRedirect(request);
+    });
 }
