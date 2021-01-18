@@ -37,14 +37,17 @@ const endpointsConfig = {
 function callService(endpoint, token, callback) {
 
   const headers = new Headers();
-  if (token) {
-    headers.append("Authorization", `Bearer ${token}`);
+  headers.append("Authorization", `Bearer ${token}`);
+
+  var body = null;
+  if(endpoint.method != "GET") {
+    body = JSON.stringify(endpoint);
   }
 
   const options = {
-    method: endpoint.method, // *GET, POST, PUT, DELETE, etc.
+    method: endpoint.method, // GET, POST, PUT, DELETE, etc.
     headers: headers,
-    body: endpoint.data
+    body: body
   };
   
   console.log(endpoint.method + ' request made to API at: ' + new Date().toString());

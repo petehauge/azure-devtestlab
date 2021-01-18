@@ -24,11 +24,11 @@ var appRouter = function (app) {
 
         var parameters = {
             "id": data.length + 1,
-            "name": req.body,
-            "course": "Agriculture 100",
-            "description": "HW",
-            "classtype": "Windows 10",
-            "size": "Small GPU"
+            "name": JSON.stringify(req.body),
+            "course": "Class 101",
+            "description": "Descriptionm",
+            "classtype": "Windows",
+            "size": "SIZE"
         };
         data.push(parameters);
 

@@ -1,3 +1,4 @@
+const bodyparser = require('body-parser') 
 const express = require('express');
 const path = require('path');
 
@@ -9,6 +10,10 @@ const port = 3000; // process.env.PORT || 3000;
 
 // Set the front-end folder to serve public assets.
 app.use(express.static('Website'));
+
+// Body-parser middleware 
+app.use(bodyparser.urlencoded({extended:false})) 
+app.use(bodyparser.json()) 
 
 // Routes are defined in the routes.js file
 var routes = require(path.join(`${__dirname}/Website/routes.js`))(app);
