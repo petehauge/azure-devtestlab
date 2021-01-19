@@ -3,8 +3,11 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Simple Portal</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
 
   <!-- msal.min.js can be used in the place of msal.js; included msal.js to make debug easy -->
   <script type="text/javascript" src="https://alcdn.msauth.net/lib/1.4.0/js/msal.js"
@@ -23,26 +26,29 @@
 
 <body>
 
-  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <nav class="navbar navbar-dark bg-dark">
     <a class="navbar-brand" href="/">Simple Portal</a>
-    <div class="btn-group ml-auto dropleft">
-      <button type="button" id="signIn" class="btn btn-secondary" onclick="signIn()">Sign In</button>
-      <button type="button" id="signOut" class="btn btn-success d-none" onclick="signOut()">Sign Out</button>
+    <div class="btn-group dropleft">
+      <button type="button" id="signIn" class="btn btn-outline-success me-2" onclick="signIn()">Sign In</button>
+      <button type="button" id="signOut" class="btn btn-sm btn-outline-secondary d-none" onclick="signOut()">Sign Out</button>
     </div>
   </nav>
 
   <div id="body-div" class="d-none">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-md">
+        <a id="show-add-class-btn" class="navbar-brand" href="#" onclick="addShow()">+ New Lab</a>
+      </div>
+    </nav>
 
-    <div>
-      <button class="btn btn-primary" id="show-add-class-btn" onclick="addShow()">+ Lab</button>
+    <h4>
+      <div id="title-div">Welcome!</div>
+    </h4>
+
+    <div id="content-div" class="container-fluid">
     </div>
 
-    <div id="title-div">Welcome!</div>
-
-    <div id="content-div">
-    </div>
-
-    <div id="add-div" class="d-none">
+    <div id="add-div" class="model d-none">
       <div>
         <h3>Add</h3>
       </div>
@@ -79,11 +85,11 @@
   <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
     integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
     crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"
+    integrity="sha384-q2kxQ16AaE6UbzuKqyBE9/u/KzioAlnx2maXQHiDX9d4/zp8Ok3f+M7DPm+Ib6IU"
     crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js"
+    integrity="sha384-pQQkAEnwaBkjpqZ8RU1fF1AKtTcHJwFl3pblpTlHXybJjHpMYo79HY3hIi4NKxyj"
     crossorigin="anonymous"></script>
 
   <!-- importing app scripts (load order is important) -->

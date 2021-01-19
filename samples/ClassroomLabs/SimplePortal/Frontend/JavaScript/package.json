@@ -4,6 +4,7 @@
   "description": "Website project for the Simple Portal",
   "main": "server.js",
   "dependencies": {
+    "bootstrap": "^5.0.0-beta1",
     "express": "^4.12.3",
     "morgan": "^1.5.2"
   },

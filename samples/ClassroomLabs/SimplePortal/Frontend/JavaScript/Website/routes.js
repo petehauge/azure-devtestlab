@@ -33,10 +33,10 @@ var appRouter = function (app) {
         var parameters = {
             "id": newID,
             "name": req.body.name,
-            "course": req.body.name,
-            "description": req.body.name,
-            "classtype": req.body.template,
-            "size": req.body.name
+            "course": "Class 101",
+            "description": "Class with " + req.body.template,
+            "classtype": "Windows 10",
+            "size": "Small"
         };
         data.content.push(parameters);
 

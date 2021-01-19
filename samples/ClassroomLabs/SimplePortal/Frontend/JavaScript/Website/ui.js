@@ -161,27 +161,30 @@ function updateUI(data, endpoint) {
   }
 
   // Print the labs
-  var p = document.createElement('p');
+  var p = document.createElement('div');
+  p.className = "card";
   for (var i = 0; i < data.content.length; i++) {
-    var div1 = document.createElement('div');
-    div1.innerText = data.content[i].id;
-    p.appendChild(div1);
+    var div = document.createElement('div');
+    
+    div = document.createElement('h5');
+    div.className = "card-title";
+    div.innerText = data.content[i].name;
+    p.appendChild(div);
 
-    var div2 = document.createElement('h5');
-    div2.innerText = data.content[i].name;
-    p.appendChild(div2);
+    div = document.createElement('div');
+    div.className = "card-text";
+    div.innerText = data.content[i].description;
+    p.appendChild(div);
 
-    var div3 = document.createElement('div');
-    div3.innerText = data.content[i].description;
-    p.appendChild(div3);
+    div = document.createElement('div');
+    div.className = "card-text";
+    div.innerText = data.content[i].classtype;
+    p.appendChild(div);
 
-    var div4 = document.createElement('div');
-    div4.innerText = data.content[i].classtype;
-    p.appendChild(div4);
-
-    var div5 = document.createElement('div');
-    div5.innerText = data.content[i].size;
-    p.appendChild(div5);
+    div = document.createElement('div');
+    div.className = "card-text";
+    div.innerText = data.content[i].size;
+    p.appendChild(div);
   };
 
   contentDiv.innerHTML = p.innerHTML;
