@@ -6,7 +6,7 @@ const path = require('path');
 const app = express();
 
 // Initialize variables.
-const port = 3000; // process.env.PORT || 3000;
+const port = process.env.PORT || 3000;
 
 // Set the front-end folder to serve public assets.
 app.use(express.static('Website'));
@@ -24,6 +24,6 @@ app.get('*', function (req, res) {
 });
 
 // Start the server.
-var server = app.listen(3000, function () {
+var server = app.listen(port, function () {
     console.log("Listening on port %s...", server.address().port);
 });

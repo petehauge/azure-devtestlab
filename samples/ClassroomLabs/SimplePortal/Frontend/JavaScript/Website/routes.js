@@ -17,7 +17,7 @@ var appRouter = function (app) {
         "size": "Small GPU"
     };
     const data = { 
-        "templates": ["Template 1", "Template 2"], 
+        "templates": ["Template 1", "Template 2", "Luca Template 1"], 
         "content": [lab1, lab2] 
     };
 

@@ -6,9 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Simple Portal</title>
 
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
-
   <!-- msal.min.js can be used in the place of msal.js; included msal.js to make debug easy -->
   <script type="text/javascript" src="https://alcdn.msauth.net/lib/1.4.0/js/msal.js"
     integrity="sha384-DqrejB/00ccJc4ufFWc+TA3ImOruMihWCj6Wu9hEzRUNdqt4180qlzT0mFa6/Zp2"
@@ -20,8 +17,8 @@
   </script>
 
   <link rel="icon" href="favicon.ico" />
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
 </head>
 
 <body>
@@ -48,33 +45,35 @@
     <div id="content-div" class="container-fluid">
     </div>
 
-    <div id="add-div" class="model d-none">
-      <div>
-        <h3>Add</h3>
-      </div>
-
+    <div id="add-div" class="text-right d-none">
       <div>
         <div>
-          <label for="labName">Name your lab</label>
-          <input type="text" id="labName" name="labName" />
+          <h3>Add</h3>
         </div>
+  
         <div>
-          <label for="labTemplate">Lab Template</label>
-          <select id="labTemplate" name="labTemplate">
-          </select>
+          <div>
+            <label for="labName">Name your lab</label>
+            <input type="text" id="labName" name="labName" />
+          </div>
+          <div>
+            <label for="labTemplate">Lab Template</label>
+            <select id="labTemplate" name="labTemplate">
+            </select>
+          </div>
+          <div>
+            <label for="username">Username</label>
+            <input type="text" id="labUsername" name="labUsername" />
+          </div>
+          <div>
+            <label for="password">Password</label>
+            <input type="password" id="labPassword" name="labPassword" />
+          </div>
         </div>
-        <div>
-          <label for="username">Username</label>
-          <input type="text" id="labUsername" name="labUsername" />
-        </div>
-        <div>
-          <label for="password">Password</label>
-          <input type="password" id="labPassword" name="labPassword" />
-        </div>
+  
+        <button class="btn btn-primary" id="btnAdd" onclick="addSubmit()">Finish</button>
+        <button class="btn btn-secondary" id="btnBack" onclick="addHide()">Back</button>
       </div>
-
-      <button class="btn btn-primary" id="btnAdd" onclick="addSubmit()">Finish</button>
-      <button class="btn btn-secondary" id="btnBack" onclick="addHide()">Back</button>
     </div>
 
     <div id="messages-div"></div>
