@@ -21,11 +21,11 @@ const loginRequest = {
 
 // Add here the endpoints here
 const endpointsConfig = {
-  classes: {
+  content: {
     url: msalConfig.auth.redirectUri + "api/classes",
     method: "GET"
   },
-  addClass: {
+  addContent: {
     url: msalConfig.auth.redirectUri + "api/classes/create",
     method: "POST",
     data: {}
@@ -37,11 +37,12 @@ const endpointsConfig = {
 function callService(endpoint, token, callback) {
 
   const headers = new Headers();
-  headers.append("Authorization", `Bearer ${token}`);
+  headers.append('Content-Type', 'application/json');
+  headers.append('Authorization', `Bearer ${token}`);
 
   var body = null;
-  if(endpoint.method != "GET") {
-    body = JSON.stringify(endpoint);
+  if (endpoint.method != "GET") {
+    body = JSON.stringify(endpoint.data);
   }
 
   const options = {
@@ -49,7 +50,7 @@ function callService(endpoint, token, callback) {
     headers: headers,
     body: body
   };
-  
+
   console.log(endpoint.method + ' request made to API at: ' + new Date().toString());
 
   fetch(endpoint.url, options)
@@ -69,10 +70,9 @@ const myMSALObj = new Msal.UserAgentApplication(msalConfig);
 const signInButton = document.getElementById("signIn");
 const signOutButton = document.getElementById('signOut');
 const bodyDiv = document.getElementById('body-div');
-const bodyTitleDiv = document.getElementById("body-title-div");
-const showAddClassBtn = document.getElementById("show-add-class-btn");
-const classesDiv = document.getElementById("classes-div");
-const addClassDiv = document.getElementById("add-class-div");
+const titleDiv = document.getElementById("title-div");
+const contentDiv = document.getElementById("content-div");
+const addDiv = document.getElementById("add-div");
 const messagesDiv = document.getElementById("messages-div");
 
 let accessToken;
@@ -116,65 +116,81 @@ function showWelcomeMessage(account) {
   signInButton.classList.add('d-none');
   signOutButton.classList.remove('d-none');
   bodyDiv.classList.remove('d-none');
-  bodyTitleDiv.innerHTML = `Welcome, ${account.name}!`;
-  displayClassesFunction();
+  titleDiv.innerHTML = `Welcome, ${account.name}!`;
+  contentDisplay();
+}
+
+function contentDisplay() {
+  getTokenRedirect(loginRequest, endpointsConfig.content);
+}
+
+function addSubmit() {
+  var template = document.getElementById("labTemplate").value;
+  var name = document.getElementById("labName").value;
+  var username = document.getElementById("labUsername").value;
+  var password = document.getElementById("labPassword").value;
+  endpointsConfig.addContent.data = { "template": template, "name": name, "username": username, "password": password };
+
+  console.log("ENDPOINT: " + JSON.stringify(endpointsConfig.addContent));
+  getTokenRedirect(loginRequest, endpointsConfig.addContent);
+}
+
+function addShow() {
+  addDiv.classList.remove('d-none');
+  messagesDiv.innerText = null;
+}
+
+function addHide() {
+  addDiv.classList.add('d-none');
+  messagesDiv.classList.remove('d-none');
+  messagesDiv.innerText = null;
 }
 
 function updateUI(data, endpoint) {
   var dataString = JSON.stringify(data);
   console.log('Graph API responded at: ' + new Date().toString());
 
-  if (endpoint == endpointsConfig.addClass) {
-    messagesDiv.innerHTML = "<strong>Class added! </strong>";
+  // Print template values
+  var select = document.getElementById('labTemplate');
+  select.length = 0;
+  for (var i = 0; i < data.templates.length; i++) {
+    var opt = document.createElement('option');
+    opt.text = data.templates[i];
+    opt.value = data.templates[i];
+    select.add(opt)
   }
 
-  // Print the classes
-  const p = document.createElement('p');
-  for(var i = 0; i<data.length; i++){
+  // Print the labs
+  var p = document.createElement('p');
+  for (var i = 0; i < data.content.length; i++) {
     var div1 = document.createElement('div');
-    div1.innerText = data[i].id;
+    div1.innerText = data.content[i].id;
     p.appendChild(div1);
-    
-    var div2 = document.createElement('div');
-    div2.innerText = data[i].name;
+
+    var div2 = document.createElement('h5');
+    div2.innerText = data.content[i].name;
     p.appendChild(div2);
-    
+
     var div3 = document.createElement('div');
-    div3.innerText = data[i].description;
+    div3.innerText = data.content[i].description;
     p.appendChild(div3);
 
     var div4 = document.createElement('div');
-    div4.innerText = data[i].classtype;
+    div4.innerText = data.content[i].classtype;
     p.appendChild(div4);
 
     var div5 = document.createElement('div');
-    div5.innerText = data[i].size;
+    div5.innerText = data.content[i].size;
     p.appendChild(div5);
   };
 
-  classesDiv.innerHTML = p.innerHTML;
-}
+  contentDiv.innerHTML = p.innerHTML;
 
-function displayClassesFunction() {
-  getTokenRedirect(loginRequest, endpointsConfig.classes);
-}
-
-function addClassFunction() {
-  endpointsConfig.addClass.data = { "name": "hi hi hooo!" };
-  getTokenRedirect(loginRequest, endpointsConfig.addClass);
-}
-
-function addClassShow() {
-  showAddClassBtn.classList.add('d-none');
-  addClassDiv.classList.remove('d-none');
-  messagesDiv.innerText = null;
-}
-
-function addClassBack() {
-  showAddClassBtn.classList.remove('d-none');
-  addClassDiv.classList.add('d-none');
-  messagesDiv.classList.remove('d-none');
-  messagesDiv.innerText = null;
+  // If add lab is called...
+  if (endpoint == endpointsConfig.addContent) {
+    messagesDiv.innerHTML = "<strong>Lab added!</strong>";
+    addDiv.classList.add('d-none');
+  }
 }
 
 // This function can be removed if you do not need to support IE

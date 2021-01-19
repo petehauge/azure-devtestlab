@@ -34,38 +34,41 @@
   <div id="body-div" class="d-none">
 
     <div>
-      <button class="btn btn-primary" id="show-add-class-btn" onclick="addClassShow()">+ Add Class</button>
+      <button class="btn btn-primary" id="show-add-class-btn" onclick="addShow()">+ Lab</button>
     </div>
 
-    <div id="body-title-div">Welcome!</div>
+    <div id="title-div">Welcome!</div>
 
-    <div id="classes-div">
+    <div id="content-div">
     </div>
 
-    <div id="add-class-div" class="d-none">
-      <div><h3>Add Class</h3></div>
+    <div id="add-div" class="d-none">
+      <div>
+        <h3>Add</h3>
+      </div>
 
       <div>
         <div>
-          <label for="labTemplate">Lab Template</label>
-          <input type="text" id="labTemplate" name="labTemplate" />
+          <label for="labName">Name your lab</label>
+          <input type="text" id="labName" name="labName" />
         </div>
         <div>
-          <label for="name">Name your lab</label>
-          <input type="text" id="name" name="name" />
+          <label for="labTemplate">Lab Template</label>
+          <select id="labTemplate" name="labTemplate">
+          </select>
         </div>
         <div>
           <label for="username">Username</label>
-          <input type="text" id="username" name="username" />
+          <input type="text" id="labUsername" name="labUsername" />
         </div>
         <div>
           <label for="password">Password</label>
-          <input type="password" id="password" name="password" />
+          <input type="password" id="labPassword" name="labPassword" />
         </div>
       </div>
 
-      <button class="btn btn-primary" id="btnAddClass" onclick="addClassFunction()">Finish</button>
-      <button class="btn btn-secondary" id="btnBack" onclick="addClassBack()">Back</button>
+      <button class="btn btn-primary" id="btnAdd" onclick="addSubmit()">Finish</button>
+      <button class="btn btn-secondary" id="btnBack" onclick="addHide()">Back</button>
     </div>
 
     <div id="messages-div"></div>

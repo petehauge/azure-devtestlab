@@ -1,6 +1,6 @@
 var appRouter = function (app) {
     
-    var data1 = {
+    var lab1 = {
         "id": 1,
         "name": "hyperv-using-ui",
         "course": "Agriculture 340",
@@ -8,7 +8,7 @@ var appRouter = function (app) {
         "classtype": "Windows 10",
         "size": "Small GPU"
     };
-    var data2 = {
+    var lab2 = {
         "id": 2,
         "name": "hyperv-using-ui",
         "description": "Agriculture 340",
@@ -16,28 +16,32 @@ var appRouter = function (app) {
         "classtype": "Windows 10",
         "size": "Small GPU"
     };
-    const data = [data1, data2];
+    const data = { 
+        "templates": ["Template 1", "Template 2"], 
+        "content": [lab1, lab2] 
+    };
+
+    function getClass(req, res) {
+        res.send(JSON.stringify(data));
+    }
 
     app.get("/api/Classes", getClass);
 
     app.post("/api/Classes/Create", function (req, res) {
 
+        var newID = data.content.length + 1;
         var parameters = {
-            "id": data.length + 1,
-            "name": JSON.stringify(req.body),
-            "course": "Class 101",
-            "description": "Descriptionm",
-            "classtype": "Windows",
-            "size": "SIZE"
+            "id": newID,
+            "name": req.body.name,
+            "course": req.body.name,
+            "description": req.body.name,
+            "classtype": req.body.template,
+            "size": req.body.name
         };
-        data.push(parameters);
+        data.content.push(parameters);
 
         getClass(req, res);
     });
-
-    function getClass(req, res) {
-        res.send(JSON.stringify(data));
-    }
 }
 
 module.exports = appRouter;
